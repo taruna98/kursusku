@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kursusku</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -16,7 +17,7 @@
     <nav class="navbar">
         <div class="navbar-inner">
             <div style="display:flex;align-items:center;gap:40px;">
-                <a href="/" class="navbar-logo">Kursusku<span>.</span></a>
+                <a href="/" class="navbar-logo">KursusKu<span>.</span></a>
                 <div class="navbar-links">
                     <a href="/" class="active">Beranda</a>
                     <a href="/courses">Kursus</a>
@@ -66,7 +67,7 @@
         <div class="hero-inner">
             <div class="hero-card">
                 <div class="hero-text">
-                    <h1>Perdalam Skillmu<br>di Kursusku!</h1>
+                    <h1>Tentukan dan Jelajahi Kemampuanmu<br>di KursusKu!</h1>
                     <div class="hero-btns">
                         <a href="{{ route('register') }}" class="btn-hero-primary">Gabung Sekarang</a>
                         <a href="/courses" class="btn-hero-outline">Lihat Kursus</a>
@@ -231,7 +232,7 @@
     </section>
 
     <!-- Testimonials -->
-    <section class="testimonials">
+    <section class="testimonials" style="display: none;">
         <div class="section">
             <h1 class="section-title" style="text-align: center;">Apa kata mereka yang sudah belajar di KursusKu?</h2>
             <div class="testi-grid">
@@ -291,7 +292,7 @@
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                             </svg>
-                            0812 3456 7890
+                            0812 xxxx xxxx
                         </div>
                         <div class="contact-row">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -305,7 +306,7 @@
                 <div class="footer-col">
                     <h5>KursusKu</h5>
                     <ul>
-                        <li><a href="#">Tentang Kami</a></li>
+                        <li><a href="#" style="display: none;">Tentang Kami</a></li>
                         <li><a href="/courses">Semua Kursus</a></li>
                         <li><a href="{{ route('register') }}">Daftar Sekarang</a></li>
                         <li><a href="{{ route('login') }}">Login</a></li>
@@ -316,9 +317,9 @@
                     <h5>Mentor</h5>
                     <ul>
                         <li><a href="{{ route('register') }}">Jadi Mentor</a></li>
-                        <li><a href="#">Panduan Mentor</a></li>
-                        <li><a href="#">Syarat &amp; Ketentuan</a></li>
-                        <li><a href="#">FAQ Mentor</a></li>
+                        <li><a href="#" style="display: none;">Panduan Mentor</a></li>
+                        <li><a href="#" style="display: none;">Syarat &amp; Ketentuan</a></li>
+                        <li><a href="#" style="display: none;">FAQ Mentor</a></li>
                     </ul>
                 </div>
                 <!-- Community -->
@@ -351,14 +352,14 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <div class="footer-links">
+                <div class="footer-links" style="display: none;">
                     <a href="#">Privacy Practices</a>
                     <a href="#">Disclaimer</a>
                     <a href="#">Accessibility</a>
                     <a href="#">Terms of Use</a>
                     <a href="#">Sitemap</a>
                 </div>
-                <span class="footer-copy">Copyright &copy; 2025 KursusKu &middot; Platform Kursus Online Indonesia</span>
+                <span class="footer-copy">Copyright &copy; 2026 KursusKu &middot; Platform Kursus Online Indonesia</span>
             </div>
         </div>
     </footer>
