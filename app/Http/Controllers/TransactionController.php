@@ -82,7 +82,7 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function callback(Request $request)
+    public function callback_old(Request $request)
     {
         Config::$serverKey = config('midtrans.server_key');
         Config::$isProduction = config('midtrans.is_production');
@@ -121,6 +121,148 @@ class TransactionController extends Controller
         }
 
         return response()->json(['message' => 'OK']);
+    }
+
+    public function callback(Request $request)
+    {
+        $payload = $request->json()->all();
+    
+        $required = [
+            'order_id',
+            'status_code',
+            'gross_amount',
+            'signature_key',
+            'transaction_id',
+        ];
+    
+        foreach ($required as $field) {
+            if (!isset($payload[$field]) || !is_scalar($payload[$field])) {
+                return response()->json(['message' => 'Invalid notification'], 400);
+            }
+        }
+    
+        $serverKey = (string) config('midtrans.server_key');
+    
+        if ($serverKey === '') {
+            \Illuminate\Support\Facades\Log::error(
+                'Midtrans server key is not configured.'
+            );
+    
+            return response()->json(['message' => 'Configuration error'], 500);
+        }
+    
+        $signatureInput = $payload['order_id']
+            . $payload['status_code']
+            . $payload['gross_amount']
+            . $serverKey;
+    
+        $expectedSignature = hash('sha512', $signatureInput);
+    
+        if (!hash_equals($expectedSignature, (string) $payload['signature_key'])) {
+            return response()->json(['message' => 'Invalid signature'], 403);
+        }
+    
+        try {
+            $notification = new Notification();
+    
+            $orderId = (string) $notification->order_id;
+            $transactionId = (string) $notification->transaction_id;
+    
+            if (
+                $orderId !== (string) $payload['order_id'] ||
+                $transactionId !== (string) $payload['transaction_id']
+            ) {
+                return response()->json(['message' => 'Transaction mismatch'], 400);
+            }
+    
+            $transaction = Transaction::where('midtrans_order_id', $orderId)
+                ->first();
+    
+            if (!$transaction) {
+                return response()->json(['message' => 'Transaction not found'], 404);
+            }
+    
+            $expectedAmount = number_format((float) $transaction->amount, 2, '.', '');
+            $midtransAmount = number_format(
+                (float) $notification->gross_amount,
+                2,
+                '.',
+                ''
+            );
+    
+            if ($expectedAmount !== $midtransAmount) {
+                \Illuminate\Support\Facades\Log::warning(
+                    'Midtrans callback amount mismatch.',
+                    ['order_id' => $orderId]
+                );
+    
+                return response()->json(['message' => 'Amount mismatch'], 422);
+            }
+    
+            $status = (string) $notification->transaction_status;
+            $fraud = (string) ($notification->fraud_status ?? '');
+    
+            $isPaid = $status === 'settlement' || ($status === 'capture' && $fraud === 'accept');
+    
+            \Illuminate\Support\Facades\DB::transaction(function () use (
+                $transaction,
+                $transactionId,
+                $status,
+                $isPaid
+            ) {
+                $locked = Transaction::whereKey($transaction->id)
+                    ->lockForUpdate()
+                    ->first();
+    
+                if (!$locked) {
+                    return;
+                }
+    
+                if ($locked->status === 'paid') {
+                    return;
+                }
+    
+                if ($isPaid) {
+                    $locked->update([
+                        'status' => 'paid',
+                        'midtrans_transaction_id' => $transactionId,
+                        'paid_at' => now(),
+                    ]);
+    
+                    Enrollment::firstOrCreate(
+                        [
+                            'user_id' => $locked->user_id,
+                            'course_id' => $locked->course_id,
+                        ],
+                        [
+                            'enrolled_at' => now(),
+                        ]
+                    );
+    
+                    return;
+                }
+    
+                if ($locked->status !== 'pending') {
+                    return;
+                }
+    
+                if (in_array($status, ['cancel', 'deny'], true)) {
+                    $locked->update(['status' => 'failed']);
+                } elseif ($status === 'expire') {
+                    $locked->update(['status' => 'expired']);
+                }
+            });
+    
+            return response()->json(['message' => 'OK']);
+    
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Midtrans callback failed', [
+                'order_id' => $payload['order_id'] ?? null,
+                'exception' => get_class($e),
+            ]);
+    
+            return response()->json(['message' => 'Callback processing failed'], 500);
+        }
     }
 
     public function resume(Transaction $transaction)

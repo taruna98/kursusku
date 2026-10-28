@@ -23,10 +23,10 @@ img { display: block; max-width: 100%; }
 .hero { background: #fff; padding: 28px 0 0; }
 .hero-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 .hero-card {
-    background: #2563eb;
+    background: #1a2cc9;
     background-image:
-        linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,.1) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(255,255,255,.1) 2px, transparent 2px);
     background-size: 40px 40px;
     border-radius: 20px;
     padding: 52px 56px;
@@ -86,7 +86,7 @@ img { display: block; max-width: 100%; }
 .course-students { font-size: .75rem; color: #6b7280; }
 
 /* ── Popular Classes ────────────────────────────────────────────── */
-.popular { padding: 56px 0; background: linear-gradient(135deg, #22d3ee 0%, #38bdf8 40%, #3b82f6 100%); }
+.popular { padding: 56px 0; background: linear-gradient(135deg, #9dc705 0%, #38bdf8 40%, #3b82f6 100%); }
 .popular .section-title { color: #fff; }
 .popular-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 .popular-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,.1); transition: box-shadow .2s, transform .2s; cursor: pointer; }
@@ -172,7 +172,7 @@ img { display: block; max-width: 100%; }
 .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
 .footer-links a { font-size: .6875rem; color: #9ca3af; transition: color .15s; }
 .footer-links a:hover { color: #2563eb; }
-.footer-copy { font-size: .6875rem; color: #9ca3af; }
+.footer-copy { font-size: .6875rem; color: #9ca3af; margin: auto;}
 
 /* ── Responsive ─────────────────────────────────────────────────── */
 @media (max-width: 1024px) {

@@ -271,7 +271,7 @@
     <section class="cta">
         <div class="cta-inner">
             <div class="cta-text">
-                <h2><mark>Mulai Perjalanan Belajarmu</mark><br>bersama KursusKu.</h2>
+                <h2><mark>Mulai Perjalanan Belajarmu</mark><br>bersama mentor KursusKu.</h2>
                 <a href="{{ route('register') }}" class="btn-cta">Daftar Sekarang</a>
             </div>
             <div class="cta-img">

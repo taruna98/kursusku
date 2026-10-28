@@ -28,6 +28,18 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/payment/{course:slug}/success', function (\App\Models\Course $course) {
+        $user = auth()->user();
+
+        $isPaid = \App\Models\Transaction::where('user_id', $user->id)
+            ->where('course_id', $course->id)
+            ->where('status', 'paid')
+            ->exists();
+
+        if (!$isPaid) {
+            return redirect()->route('transactions.history')
+                ->with('error', 'Pembayaran belum terverifikasi. Silakan periksa riwayat transaksi.');
+        }
+
         return redirect()->route('siswa.dashboard')
             ->with('success', 'Pembayaran berhasil! Kamu sekarang bisa mengakses kursus "' . $course->title . '".');
     })->name('payment.success');
