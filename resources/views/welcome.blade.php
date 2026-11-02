@@ -14,16 +14,270 @@
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar">
+    <style>
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.97);
+            border-bottom: 1px solid #e5e7eb;
+            backdrop-filter: blur(12px);
+        }
+
+        .navbar-inner {
+            max-width: 1200px;
+            min-height: 72px;
+            padding: 0 24px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            min-width: 0;
+        }
+
+        .navbar-logo {
+            color: #111827;
+            font-size: 1.375rem;
+            font-weight: 800;
+            text-decoration: none;
+            white-space: nowrap;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-logo span {
+            color: #2563eb;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .navbar-links a {
+            color: #6b7280;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .navbar-links a:hover,
+        .navbar-links a.active {
+            color: #2563eb;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar-user {
+            position: relative;
+        }
+
+        .navbar-user-trigger {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .navbar-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .navbar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .navbar-avatar span {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .navbar-user-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            max-width: 130px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .navbar-mobile-toggle,
+        .navbar-mobile-menu {
+            display: none;
+        }
+
+        .navbar-mobile-toggle {
+            background: transparent;
+            border: none;
+            color: #374151;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .navbar-mobile-menu {
+            padding: 12px 20px 20px;
+            border-top: 1px solid #f3f4f6;
+            background: #fff;
+        }
+
+        .navbar-mobile-menu > a {
+            display: block;
+            padding: 12px 14px;
+            color: #374151;
+            text-decoration: none;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+
+        .navbar-mobile-menu > a:hover,
+        .navbar-mobile-menu > a.active {
+            color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .navbar-mobile-divider {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 12px 0;
+        }
+
+        .navbar-mobile-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            color: #374151;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .navbar-mobile-menu form {
+            margin: 0;
+        }
+
+        .navbar-mobile-logout {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            padding: 12px 14px;
+            color: #dc2626;
+            font-size: 0.9375rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .navbar-mobile-logout:hover {
+            background: #fef2f2;
+        }
+
+        /* Mobile */
+        @media (max-width: 767px) {
+            .navbar-inner {
+                min-height: 64px;
+                padding: 0 16px;
+            }
+
+            .navbar-brand {
+                gap: 0;
+            }
+
+            .navbar-logo {
+                font-size: 1.25rem;
+            }
+
+            .navbar-links,
+            .navbar-actions {
+                display: none;
+            }
+
+            .navbar-mobile-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .navbar-mobile-menu {
+                display: block;
+            }
+        }
+
+        /* Tablet */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .navbar-inner {
+                padding: 0 20px;
+            }
+
+            .navbar-brand {
+                gap: 24px;
+            }
+
+            .navbar-links {
+                gap: 18px;
+            }
+
+            .navbar-actions {
+                gap: 12px;
+            }
+
+            .navbar-user-name {
+                max-width: 90px;
+            }
+        }
+    </style>
+    <nav class="navbar" x-data="{ mobileOpen: false }">
         <div class="navbar-inner">
-            <div style="display:flex;align-items:center;gap:40px;">
-                <a href="/" class="navbar-logo">KursusKu<span>.</span></a>
+
+            <!-- Logo + Desktop Navigation -->
+            <div class="navbar-brand">
+                <a href="/" class="navbar-logo">
+                    KursusKu<span>.</span>
+                </a>
+
                 <div class="navbar-links">
-                    <a href="/" class="active">Beranda</a>
-                    <a href="/courses">Kursus</a>
+                    <a href="/" class="{{ request()->is('/') ? 'active' : '' }}">
+                        Beranda
+                    </a>
+                    <a href="/courses" class="{{ request()->is('courses*') ? 'active' : '' }}">
+                        Kursus
+                    </a>
                 </div>
             </div>
-            <div class="navbar-actions" x-data="{ open: false }">
+
+            <!-- Desktop Actions -->
+            <div class="navbar-actions">
+
                 @auth
                     @php
                         $dashUrl = auth()->user()->isAdmin()
@@ -32,33 +286,186 @@
                                 ? route('mentor.dashboard')
                                 : route('siswa.dashboard'));
                     @endphp
-                    <a href="{{ $dashUrl }}" class="btn-login">Dashboard</a>
-                    <div style="position:relative;">
-                        <button @click="open = !open" style="display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none;padding:0;font-family:'Inter',sans-serif;">
-                            <div style="width:32px;height:32px;border-radius:50%;overflow:hidden;background:#e0e7ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+
+                    <a href="{{ $dashUrl }}" class="btn-login">
+                        Dashboard
+                    </a>
+
+                    <div class="navbar-user" x-data="{ open: false }">
+
+                        <button
+                            type="button"
+                            class="navbar-user-trigger"
+                            @click="open = !open"
+                            @keydown.escape.window="open = false"
+                        >
+                            <div class="navbar-avatar">
                                 @if(auth()->user()->avatar)
-                                    <img src="{{ asset('storage/' . auth()->user()->avatar) }}" style="width:100%;height:100%;object-fit:cover;">
+                                    <img
+                                        src="{{ asset('storage/' . auth()->user()->avatar) }}"
+                                        alt="Avatar"
+                                    >
                                 @else
-                                    <span style="font-size:0.875rem;font-weight:700;color:#2563eb;">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                                    <span>
+                                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                    </span>
                                 @endif
                             </div>
-                            <span style="font-size:0.875rem;font-weight:500;color:#374151;">{{ auth()->user()->name }}</span>
-                            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+
+                            <span class="navbar-user-name">
+                                {{ auth()->user()->name }}
+                            </span>
+
+                            <svg
+                                width="14"
+                                height="14"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M19 9l-7 7-7-7"
+                                />
                             </svg>
                         </button>
-                        <div class="panel-user-dropdown" x-show="open" @click.away="open = false" x-cloak style="z-index:9999;">
+
+                        <div
+                            class="panel-user-dropdown"
+                            x-show="open"
+                            @click.away="open = false"
+                            x-transition
+                            x-cloak
+                            style="z-index:9999;"
+                        >
                             <a href="{{ route('profile.edit') }}">Profil</a>
+
                             <form method="POST" action="{{ route('logout') }}" style="margin:0">
                                 @csrf
                                 <button type="submit">Logout</button>
                             </form>
                         </div>
+
                     </div>
+
                 @else
-                    <a href="{{ route('login') }}" class="btn-register">Login</a>
+
+                    <a href="{{ route('login') }}" class="btn-register">
+                        Login
+                    </a>
+
                 @endauth
+
             </div>
+
+            <!-- Mobile Menu Button -->
+            <button
+                type="button"
+                class="navbar-mobile-toggle"
+                @click="mobileOpen = !mobileOpen"
+                :aria-expanded="mobileOpen.toString()"
+                aria-label="Buka menu navigasi"
+            >
+                <svg
+                    x-show="!mobileOpen"
+                    width="25"
+                    height="25"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"
+                    />
+                </svg>
+
+                <svg
+                    x-show="mobileOpen"
+                    x-cloak
+                    width="25"
+                    height="25"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                    />
+                </svg>
+            </button>
+
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div
+            class="navbar-mobile-menu"
+            x-show="mobileOpen"
+            x-transition
+            x-cloak
+        >
+
+            <a href="/" class="{{ request()->is('/') ? 'active' : '' }}">
+                Beranda
+            </a>
+
+            <a href="/courses" class="{{ request()->is('courses*') ? 'active' : '' }}">
+                Kursus
+            </a>
+
+            @auth
+
+                <div class="navbar-mobile-divider"></div>
+
+                <div class="navbar-mobile-user">
+                    <div class="navbar-avatar">
+                        @if(auth()->user()->avatar)
+                            <img
+                                src="{{ asset('storage/' . auth()->user()->avatar) }}"
+                                alt="Avatar"
+                            >
+                        @else
+                            <span>
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </span>
+                        @endif
+                    </div>
+
+                    <span>{{ auth()->user()->name }}</span>
+                </div>
+
+                <a href="{{ $dashUrl }}">
+                    Dashboard
+                </a>
+
+                <a href="{{ route('profile.edit') }}">
+                    Profil
+                </a>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="navbar-mobile-logout">
+                        Logout
+                    </button>
+                </form>
+
+            @else
+
+                <div class="navbar-mobile-divider"></div>
+
+                <a href="{{ route('login') }}" class="navbar-mobile-login">
+                    Login
+                </a>
+
+            @endauth
+
         </div>
     </nav>
 
@@ -135,7 +542,7 @@
                     </div>
                     <div class="course-body">
                         <div class="course-title">{{ $c->title }}</div>
-                        <div class="course-author">By <span>{{ $c->mentor->name ?? 'Mentor' }}</span> · {{ $c->category->name ?? '-' }}</div>
+                        <div class="course-author">By <span>{{ $c->mentor->name ?? 'Mentor' }}</span> &#x2022; {{ $c->category->name ?? '-' }}</div>
                         <div class="stars">
                             @for($i = 1; $i <= 5; $i++)
                             <svg class="{{ $i <= floor($rating) ? 'star-on' : 'star-off' }}" fill="currentColor" viewBox="0 0 20 20">
@@ -175,7 +582,7 @@
                     </div>
                     <div class="course-body">
                         <div class="course-title">{{ $c->title }}</div>
-                        <div class="course-author">By <span>{{ $c->mentor->name ?? 'Mentor' }}</span> · {{ $c->category->name ?? '-' }}</div>
+                        <div class="course-author">By <span>{{ $c->mentor->name ?? 'Mentor' }}</span> &#x2022; {{ $c->category->name ?? '-' }}</div>
                         <div class="stars">
                             @for($i = 1; $i <= 5; $i++)
                             <svg class="{{ $i <= floor($rating) ? 'star-on' : 'star-off' }}" fill="currentColor" viewBox="0 0 20 20">
